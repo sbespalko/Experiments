@@ -9,7 +9,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-class CustomerSerializer {
+public class CustomerSerializer {
   public static void main(String[] args) throws IOException, JAXBException {
     Customer customer = new Customer();
     customer.setId(100);

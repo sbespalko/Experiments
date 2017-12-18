@@ -7,23 +7,19 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
-  <artifactId>converters</artifactId>
-
   <parent>
-    <groupId>ru.sbespalko</groupId>
     <artifactId>experiments</artifactId>
+    <groupId>ru.sbespalko</groupId>
     <version>1.0.0</version>
   </parent>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-    </dependency>
-  </dependencies>
+  <artifactId>outer_pom</artifactId>
+  <groupId>ru.sbespalko.outerpom</groupId>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>inner_jar</module>
+  </modules>
+
 
 </project>
