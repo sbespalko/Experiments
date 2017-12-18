@@ -24,6 +24,10 @@
       <groupId>ru.sbespalko.innerpom</groupId>
       <artifactId>inner_jar</artifactId>
     </dependency>
+    <dependency>
+      <groupId>ru.sbespalko.inner-repository</groupId>
+      <artifactId>ShowHello</artifactId>
+    </dependency>
   </dependencies>
 
 </project>

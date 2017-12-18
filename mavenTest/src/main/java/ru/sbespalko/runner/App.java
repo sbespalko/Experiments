@@ -1,6 +1,7 @@
 package ru.sbespalko.runner;
 
 import jaxb.xml.customer.CustomerSerializer;
+import ru.sbespalko.AppShower;
 import ru.sbespalko.InnerClass;
 
 /**
@@ -12,5 +13,7 @@ public class App {
     CustomerSerializer serializer = new CustomerSerializer();
     InnerClass aClass = new InnerClass();
     aClass.showInner();
+    AppShower shower = new AppShower();
+    shower.showNumber();
   }
 }
