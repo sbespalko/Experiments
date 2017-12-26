@@ -11,7 +11,7 @@
   <groupId>ru.sbespalko</groupId>
   <artifactId>experiments</artifactId>
   <packaging>pom</packaging>
-  <version>${central.version}</version>
+  <version>1.0.0</version>
 
   <build>
     <plugins>

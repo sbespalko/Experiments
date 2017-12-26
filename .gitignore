@@ -1,5 +1,6 @@
 .*
 !.gitignore
+!.gitmodules
 /examples
 *.iml
 /target/

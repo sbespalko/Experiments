@@ -1,3 +1,4 @@
 [submodule "git-submodules/ShowHello"]
 	path = git-submodules/ShowHello
 	url = https://github.com/sbespalko/ShowHello.git
+  ignore=dirty
