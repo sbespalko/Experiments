@@ -5,7 +5,7 @@ package ru.sbespalko;
  * @since 17.01.2018
  */
 public class SecondClass {
-  public void doWork() {
+  public void doWork(int i) {
     System.out.println(this.getClass() + ".doWork()");
   }
 }

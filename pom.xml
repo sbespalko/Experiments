@@ -34,6 +34,7 @@
     <module>git-submodules</module>
     <module>mavenTest</module>
     <module>aop</module>
+    <module>swing-training</module>
   </modules>
 
   <dependencyManagement>
