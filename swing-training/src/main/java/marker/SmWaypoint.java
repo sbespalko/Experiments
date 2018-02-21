@@ -1,6 +1,11 @@
 package marker;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import javax.swing.*;
 
 /**
@@ -8,61 +13,91 @@ import javax.swing.*;
  * @since 21.02.2018
  */
 public class SmWaypoint {
-  public static final String ONE_STORE = "1";
-  private JPanel component;
+  private static final String ONE_STORE = "1";
+  private JComponent component;
+  private JLayeredPane layeredPane;
   private Labels markerType;
   private Labels shopType;
+  private JLabel markerLabel;
   private CenteredLabel shopLabel;
   private CenteredLabel numberLabel;
+  private Font numberFont;
   private int nodesCount;
   private int exceptionsCount;
+  private ArrayList<ActionListener> listeners;
 
-  public SmWaypoint() {
-    this(Labels.SHOP5);
+  public SmWaypoint(GeoPosition gp, String tooltip, String command) {
+    this(gp, Labels.SHOP5, tooltip, command);
   }
 
-  public SmWaypoint(Labels shopType) {
-    this(shopType, Labels.CLUSTER);
+  public SmWaypoint(GeoPosition gp, Labels shopType, String tooltip, String command) {
+    this(gp, shopType, Labels.CLUSTER, tooltip, command);
   }
 
-  public SmWaypoint(Labels shopType, Labels markerType) {
+  public SmWaypoint(GeoPosition gp,
+                    Labels shopType,
+                    Labels markerType,
+                    String tooltip,
+                    final String command) {
+    listeners = new ArrayList<ActionListener>();
+    numberFont = new Font("Tahoma", Font.PLAIN, 8);
+
+    initLabels(shopType, markerType);
+
+    layeredPane = new JLayeredPane();
+    layeredPane.add(numberLabel, 12);
+    layeredPane.add(shopLabel, 11);
+    layeredPane.add(markerLabel, 10);
+    layeredPane.setOpaque(true);
+    layeredPane.setPreferredSize(markerLabel.getPreferredSize());
+
+
     component = new JPanel();
-    component.setLayout(null);
-    component.setOpaque(false);
-    component.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-    JLabel markerLabel = new JLabel(markerType.getIcon());
-    Dimension markerLabelSize = markerLabel.getPreferredSize();
-    markerLabel.setBounds(component.getX(),
-                          component.getY(),
-                          markerLabelSize.width,
-                          markerLabelSize.height);
-    component.add(markerLabel);
-
-    shopLabel = getCenteredLabel(component, shopType);
-    component.add(shopLabel);
-
-    numberLabel = getCenteredLabel(component, Labels.EMPTY);
-    numberLabel.setText(ONE_STORE);
-    numberLabel.setFont(new Font("Tahoma", Font.PLAIN, 8));
-    numberLabel.setVisible(false);
-    component.add(numberLabel);
+    component.setToolTipText(tooltip);
+    component.add(layeredPane);
+    component.addMouseListener(new MouseAdapter() {
+      public void mouseClicked(MouseEvent e) {
+        for (ActionListener al : listeners) {
+          al.actionPerformed(new ActionEvent(component, ActionEvent.ACTION_PERFORMED, command));
+        }
+      }
+    });
 
     this.markerType = markerType;
     this.shopType = shopType;
-    component.setSize(50, 50);
-    component.setVisible(true);
   }
 
-  private CenteredLabel getCenteredLabel(JPanel parent, Labels lType) {
-    CenteredLabel label = new CenteredLabel(parent);
-    label.setIcon(lType.getIcon());
+  private void initLabels(Labels shopType, Labels markerType) {
+    numberLabel = getCenteredLabel(Labels.EMPTY);
+    numberLabel.setText(ONE_STORE);
+    numberLabel.setFont(numberFont);
+    numberLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    numberLabel.setVerticalAlignment(SwingConstants.CENTER);
+    numberLabel.setVisible(false);
+
+    shopLabel = getCenteredLabel(shopType);
+    shopLabel.setVisible(true);
+
+    markerLabel = new JLabel(markerType.getIcon());
+    markerLabel.setBounds(0,
+                          0,
+                          markerType.getIcon().getIconWidth(),
+                          markerType.getIcon().getIconHeight());
+  }
+
+  private CenteredLabel getCenteredLabel(Labels lType) {
+    CenteredLabel label = new CenteredLabel(lType.getIcon());
+    if (!lType.equals(Labels.EMPTY)) {
+      label.setIcon(lType.getIcon());
+    }
+    label.setOpaque(false);
     label.setCenter(lType.getCenterX(), lType.getCenterY());
     label.centering();
+
     return label;
   }
 
-  public JComponent getComponent() {
+  public JComponent getLayeredPane() {
     return component;
   }
 
@@ -98,7 +133,7 @@ public class SmWaypoint {
 
     }
     this.nodesCount = nodesCount;
-    component.repaint();
+    //layeredPane.repaint();
   }
 
   public enum Labels {
@@ -108,14 +143,16 @@ public class SmWaypoint {
     CLUSTER("/image/marker-cluster.png", 13, 13),
     CROSSING("/image/marker-crossing.png", 13, 13),
     EXPRESS("/image/marker-express.png", 13, 13),
-    EMPTY("/image/marker-empty.png", 13, 13);
+    EMPTY(null, 13, 13);
 
     private ImageIcon icon;
     private int centerX;
     private int centerY;
 
     Labels(String url, int centerX, int centerY) {
-      this.icon = new ImageIcon(getClass().getResource(url));
+      if (url != null) {
+        this.icon = new ImageIcon(getClass().getResource(url));
+      }
       this.centerX = centerX;
       this.centerY = centerY;
     }
@@ -137,12 +174,15 @@ public class SmWaypoint {
    * JLabel, который центрируется вокруг заданной точки
    */
   private class CenteredLabel extends JLabel {
-    private JComponent parent;
-    private int centerX;
-    private int centerY;
+    private double centerX;
+    private double centerY;
 
-    public CenteredLabel(JComponent parent) {
-      this.parent = parent;
+    public CenteredLabel(Icon icon) {
+      super(icon);
+    }
+
+    public CenteredLabel(String text) {
+      super(text);
     }
 
     public void setCenter(int centerX, int centerY) {
@@ -152,12 +192,10 @@ public class SmWaypoint {
 
     public void centering() {
       Dimension thisSize = this.getPreferredSize();
-      //this.setAlignmentX(0);
-      //this.setAlignmentY(0);
-      int leftBound = centerX - thisSize.width / 2;
-      int topBound = centerY - thisSize.height / 2;
-      this.setLocation(leftBound, topBound);
-      //this.setBounds(leftBound, topBound, thisSize.width, thisSize.height);
+      int leftBound = (int) (centerX - thisSize.width / 2);
+      int topBound = (int) (centerY - thisSize.height / 2);
+      //this.setLocation(leftBound, topBound);
+      this.setBounds(leftBound, topBound, thisSize.width, thisSize.height);
     }
   }
 }
