@@ -1,12 +1,19 @@
 package marker;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 /**
  * @author bespalko
@@ -15,9 +22,6 @@ import javax.swing.*;
 public class SmWaypoint {
   private static final String ONE_STORE = "1";
   private JComponent component;
-  private JLayeredPane layeredPane;
-  private Labels markerType;
-  private Labels shopType;
   private JLabel markerLabel;
   private CenteredLabel shopLabel;
   private CenteredLabel numberLabel;
@@ -44,13 +48,12 @@ public class SmWaypoint {
 
     initLabels(shopType, markerType);
 
-    layeredPane = new JLayeredPane();
+    JLayeredPane layeredPane = new JLayeredPane();
     layeredPane.add(numberLabel, 12);
     layeredPane.add(shopLabel, 11);
     layeredPane.add(markerLabel, 10);
     layeredPane.setOpaque(true);
     layeredPane.setPreferredSize(markerLabel.getPreferredSize());
-
 
     component = new JPanel();
     component.setToolTipText(tooltip);
@@ -62,9 +65,6 @@ public class SmWaypoint {
         }
       }
     });
-
-    this.markerType = markerType;
-    this.shopType = shopType;
   }
 
   private void initLabels(Labels shopType, Labels markerType) {
