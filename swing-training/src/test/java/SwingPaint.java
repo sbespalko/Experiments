@@ -28,7 +28,7 @@ public class SwingPaint {
     JFrame frame = new JFrame("Swing Paint Demo");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    JComponent newContentPane = wayPoint.getComponent();
+    JComponent newContentPane = wayPoint.getLayeredPane();
     newContentPane.add(button);
     //newContentPane.setOpaque(true);
     frame.setContentPane(newContentPane);

@@ -1,5 +1,6 @@
 package ru.sbespalko.runner;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.Objects;
  * @since 29.12.2017
  */
 public class CloneTest {
-  public static void main(String[] args) throws CloneNotSupportedException {
+  public static void main(String[] args) throws CloneNotSupportedException, IOException {
     List<Integer> list = new ArrayList<>();
     list.add(1);
     list.add(5);

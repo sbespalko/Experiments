@@ -36,6 +36,7 @@
     <module>aop</module>
     <module>swing-training</module>
     <module>media-http-downloader</module>
+    <module>translate-utils</module>
   </modules>
 
   <dependencyManagement>
