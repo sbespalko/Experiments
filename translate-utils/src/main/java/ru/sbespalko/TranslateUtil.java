@@ -56,7 +56,6 @@ public class TranslateUtil {
     }
     Map<String, String> diffMap = new LinkedHashMap<>();
     diffMap.putAll(getDiffValues(props1, props2));
-    diffMap.putAll(getDiffValues(props2, props1));
     return diffMap;
   }
 
@@ -64,7 +63,7 @@ public class TranslateUtil {
     Map<String, String> diffValues = new LinkedHashMap<>();
     for (Map.Entry<Object, Object> entry1 : props1.entrySet()) {
       String key1 = (String) entry1.getKey();
-      if (!props2.contains(key1)) {
+      if (!props2.containsKey(key1)) {
         diffValues.put(key1, (String) entry1.getValue());
       }
     }
