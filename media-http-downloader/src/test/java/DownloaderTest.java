@@ -28,7 +28,7 @@ public class DownloaderTest {
   @Rule
   public TemporaryFolder folder = new TemporaryFolder();
 
-  Downloader subj;
+  private Downloader subj;
 
   private Map<URL, File> urlToFile;
 
@@ -36,7 +36,7 @@ public class DownloaderTest {
   public void setUp() throws Exception {
     urlToFile = new LinkedHashMap<>();
     urlToFile.put(new URL("http://speedtest.ftp.otenet.gr/files/test100k.db"),
-                  new File(/*folder.getRoot(),*/ "testFile1"));
+                  new File(/*folder.getRoot(), */"testFile1"));
     urlToFile.put(new URL("http://speedtest.ftp.otenet.gr/files/test1Mb.db"),
                   new File(/*folder.getRoot(),*/ "testFile2"));
   }
@@ -55,7 +55,7 @@ public class DownloaderTest {
     }
   }
 
-  private void checkFilesNotExist() throws IOException {
+  private void checkFilesNotExist() {
     for (File file : urlToFile.values()) {
       if (file.exists()) {
         fail("File \"" + file.getAbsolutePath() + "\" exist before test.");
@@ -64,12 +64,7 @@ public class DownloaderTest {
   }
 
   private Downloader createDownloader(URL from, File to) {
-    return new Downloader.Builder(from, to).setProgressListener(new MediaHttpDownloaderProgressListener() {
-      @Override
-      public void progressChanged(MediaHttpDownloader downloader) throws IOException {
-        showToConsole(downloader, from, to);
-      }
-    }).build();
+    return new Downloader.Builder(from, to).setProgressListener(downloader -> showToConsole(downloader, from, to)).build();
   }
 
   private void showToConsole(MediaHttpDownloader downloader, URL from, File to) {
@@ -84,14 +79,14 @@ public class DownloaderTest {
   }
 
   @Test
-  public void when_BreakDownloadFiles_Then_Resume() throws IOException, InterruptedException {
+  public void when_BreakDownloadFiles_Then_Resume() throws IOException {
     checkFilesNotExist();
     for (Map.Entry<URL, File> entry : urlToFile.entrySet()) {
       URL from = entry.getKey();
       File to = entry.getValue();
       subj = createDownloader(from, to);
       int fileSize = (int) subj.getUrlFileSize();
-      subj.getDownloader().setContentRange(0, fileSize / 3);
+      //subj.getDownloader().setContentRange(0, fileSize / 3);
 
       //TODO выкачать файлы полностью и разрезать их джавой
 
@@ -122,7 +117,7 @@ public class DownloaderTest {
   @Test
   public void downloadPartialNeverEnds() throws IOException {
     MediaHttpDownloader downloader = new MediaHttpDownloader(new NetHttpTransport(), null);
-    downloader.setContentRange(0, 1024);
+    //downloader.setContentRange(0, 1024);
     OutputStream out = new FileOutputStream(new File("test-file1"));
     downloader.download(new GenericUrl("http://speedtest.tele2.net/100MB.zip"), out);
   }

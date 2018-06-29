@@ -37,6 +37,7 @@
     <module>swing-training</module>
     <module>media-http-downloader</module>
     <module>translate-utils</module>
+    <module>watch-dir</module>
   </modules>
 
   <dependencyManagement>
